@@ -1,11 +1,9 @@
 <?php
 class Import_Export_All extends Plugin implements IHandler {
 
-	private $link;
 	private $host;
 
 	function init($host) {
-		$this->link = $host->get_link();
 		$this->host = $host;
 
 		$host->add_hook($host::HOOK_PREFS_TAB, $this);
@@ -29,11 +27,11 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		_debug("please enter your username:");
 
-		$username = db_escape_string($this->link, trim(read_stdin()));
+		$username = db_escape_string(trim(read_stdin()));
 
 		_debug("importing $filename for user $username...\n");
 
-		$result = db_query($this->link, "SELECT id FROM ttrss_users WHERE login = '$username'");
+		$result = db_query("SELECT id FROM ttrss_users WHERE login = '$username'");
 
 		if (db_num_rows($result) == 0) {
 			print "error: could not find user $username.\n";
@@ -42,11 +40,11 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		$owner_uid = db_fetch_result($result, 0, "id");
 
-		$this->perform_data_import($this->link, $filename, $owner_uid);
+		$this->perform_data_import($filename, $owner_uid);
 	}
 
 	function save() {
-		$example_value = db_escape_string($this->link, $_POST["example_value"]);
+		$example_value = db_escape_string($_POST["example_value"]);
 
 		echo "Value set to $example_value (not really)";
 	}
@@ -119,12 +117,12 @@ class Import_Export_All extends Plugin implements IHandler {
 	}
 
 	function exportrun() {
-		$offset = (int) db_escape_string($this->link, $_REQUEST['offset']);
+		$offset = (int) db_escape_string($_REQUEST['offset']);
 		$exported = 0;
 		$limit = 500;
 
 		if ($offset < 100000 && is_writable(CACHE_DIR . "/export")) {
-			$result = db_query($this->link, "SELECT
+			$result = db_query("SELECT
 					ttrss_entries.guid,
 					ttrss_entries.title,
                     ttrss_entries.author,
@@ -244,7 +242,7 @@ class Import_Export_All extends Plugin implements IHandler {
 
 					foreach ($article_node->childNodes as $child) {
 						if ($child->nodeName != 'label_cache')
-							$article[$child->nodeName] = db_escape_string($this->link, $child->nodeValue, false);
+							$article[$child->nodeName] = db_escape_string($child->nodeValue, false);
 						else
 							$article[$child->nodeName] = $child->nodeValue;
 					}
@@ -371,7 +369,7 @@ class Import_Export_All extends Plugin implements IHandler {
 								}
 
 								$tag_cache = $article['tag_cache'];
-								$label_cache = db_escape_string($this->link, $article['label_cache']);
+								$label_cache = db_escape_string($article['label_cache']);
 								$note = $article['note'];
 
 								//print "Importing " . $article['title'] . "<br/>";
@@ -445,7 +443,7 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		if (is_file($_FILES['export_file']['tmp_name'])) {
 
-			$this->perform_data_import($this->link, $_FILES['export_file']['tmp_name'], $_SESSION['uid']);
+			$this->perform_data_import($_FILES['export_file']['tmp_name'], $_SESSION['uid']);
 
 		} else {
 			print "<p>" . T_sprintf("Could not upload file. You might need to adjust upload_max_filesize in PHP.ini (current value = %s)", ini_get("upload_max_filesize")) . " or use CLI import tool.</p>";
