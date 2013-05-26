@@ -75,7 +75,7 @@ class Import_Export_All extends Plugin implements IHandler {
 			enctype=\"multipart/form-data\" method=\"POST\"
 			action=\"backend.php\">
 			<input id=\"export_file\" name=\"export_file\" type=\"file\">&nbsp;
-			<input type=\"hidden\" name=\"op\" value=\"pluginhandler\">
+		<input type=\"hidden\" name=\"op\" value=\"pluginhandler\">
 			<input type=\"hidden\" name=\"plugin\" value=\"import_export\">
 			<input type=\"hidden\" name=\"method\" value=\"dataimport\">
 			<button dojoType=\"dijit.form.Button\" onclick=\"return importData();\" type=\"submit\">" .
@@ -123,32 +123,32 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		if ($offset < 100000 && is_writable(CACHE_DIR . "/export")) {
 			$result = db_query("SELECT
-					ttrss_entries.guid,
-					ttrss_entries.title,
-                    ttrss_entries.author,
-					ttrss_entries.no_orig_date,
-					ttrss_entries.date_updated,
-					ttrss_entries.date_entered,
-					content,
-					marked,
-					published,
-					score,
-					note,
-					link,
-					tag_cache,
-					label_cache,
-					unread,
-					last_read,
-					ttrss_feeds.title AS feed_title,
-					ttrss_feeds.feed_url AS feed_url,
-					ttrss_entries.updated
+				ttrss_entries.guid,
+				ttrss_entries.title,
+				ttrss_entries.author,
+				ttrss_entries.no_orig_date,
+				ttrss_entries.date_updated,
+				ttrss_entries.date_entered,
+				content,
+				marked,
+				published,
+				score,
+				note,
+				link,
+				tag_cache,
+				label_cache,
+				unread,
+				last_read,
+				ttrss_feeds.title AS feed_title,
+				ttrss_feeds.feed_url AS feed_url,
+				ttrss_entries.updated
 				FROM
-					ttrss_user_entries LEFT JOIN ttrss_feeds ON (ttrss_feeds.id = feed_id),
+				ttrss_user_entries LEFT JOIN ttrss_feeds ON (ttrss_feeds.id = feed_id),
 					ttrss_entries
-				WHERE
+					WHERE
 					ref_id = ttrss_entries.id AND
 					ttrss_user_entries.owner_uid = " . $_SESSION['uid'] . "
-				ORDER BY ttrss_entries.id LIMIT $limit OFFSET $offset");
+					ORDER BY ttrss_entries.id LIMIT $limit OFFSET $offset");
 
 			$exportname = sha1($_SESSION['uid'] . $_SESSION['login']);
 
@@ -191,7 +191,7 @@ class Import_Export_All extends Plugin implements IHandler {
 		$num_imported = 0;
 		$num_processed = 0;
 		$num_feeds_created = 0;
-        $counter = 0;
+		$counter = 0;
 
 		$doc = @DOMDocument::load($filename);
 
@@ -231,7 +231,7 @@ class Import_Export_All extends Plugin implements IHandler {
 
 			$articles = $xpath->query("//article");
 
-            $feed_cache = [];
+			$feed_cache = [];
 
 			foreach ($articles as $article_node) {
 				if ($article_node->childNodes) {
@@ -254,10 +254,10 @@ class Import_Export_All extends Plugin implements IHandler {
 					if ($article['guid']) {
 
 						++$num_processed;
-                        if ($counter >= 250) {
-                            $counter = 0;
-                            echo "$num_processed process\n";
-                        }
+						if ($counter >= 250) {
+							$counter = 0;
+							echo "$num_processed process\n";
+						}
 
 						//db_query($link, "BEGIN");
 
@@ -270,31 +270,31 @@ class Import_Export_All extends Plugin implements IHandler {
 
 							$result = db_query($link,
 								"INSERT INTO ttrss_entries
-									(title,
-									guid,
-									link,
-									updated,
-									content,
-									content_hash,
-									no_orig_date,
-									date_updated,
-									date_entered,
-									comments,
-									num_comments,
-									author)
+								(title,
+								guid,
+								link,
+								updated,
+								content,
+								content_hash,
+								no_orig_date,
+								date_updated,
+								date_entered,
+								comments,
+								num_comments,
+								author)
 								VALUES
-									('".$article['title']."',
-									'".$article['guid']."',
-									'".$article['link']."',
-									'".$article['updated']."',
-									'".$article['content']."',
-									'".sha1($article['content'])."',
-									".bool_to_sql_bool(sql_bool_to_bool($article['no_orig_date'])).",
-									'".$article['date_updated']."',
-									'".$article['date_entered']."',
-									'',
-									'0',
-									'".$article['author']."')");
+								('".$article['title']."',
+								'".$article['guid']."',
+								'".$article['link']."',
+								'".$article['updated']."',
+								'".$article['content']."',
+								'".sha1($article['content'])."',
+								".bool_to_sql_bool(sql_bool_to_bool($article['no_orig_date'])).",
+								'".$article['date_updated']."',
+								'".$article['date_entered']."',
+								'',
+								'0',
+								'".$article['author']."')");
 
 							$result = db_query($link, "SELECT id FROM ttrss_entries
 								WHERE guid = '".$article['guid']."'");
@@ -321,7 +321,7 @@ class Import_Export_All extends Plugin implements IHandler {
 									$feed = $feed_cache["${feed_url}..${feed_title}"];
 								} else {
 									$result = db_query($link, "SELECT id FROM ttrss_feeds
-											WHERE feed_url = '$feed_url' AND owner_uid = '$owner_uid'");
+										WHERE feed_url = '$feed_url' AND owner_uid = '$owner_uid'");
 
 									if (db_num_rows($result) != 0) {
 										$feed = db_fetch_result($result, 0, "id");
@@ -332,7 +332,7 @@ class Import_Export_All extends Plugin implements IHandler {
 											feed_url, title) VALUES ($owner_uid, '$feed_url', '$feed_title')");
 
 										$result = db_query($link, "SELECT id FROM ttrss_feeds
-												WHERE feed_url = '$feed_url' AND owner_uid = '$owner_uid'");
+											WHERE feed_url = '$feed_url' AND owner_uid = '$owner_uid'");
 
 										if (db_num_rows($result) != 0) {
 											++$num_feeds_created;
@@ -379,10 +379,10 @@ class Import_Export_All extends Plugin implements IHandler {
 								$result = db_query($link,
 									"INSERT INTO ttrss_user_entries
 									(ref_id, owner_uid, feed_id, unread, last_read, marked,
-										published, score, tag_cache, label_cache, uuid, note)
+									published, score, tag_cache, label_cache, uuid, note)
 									VALUES ($ref_id, $owner_uid, $feed, $unread,
 										$last_read, $marked, $published, $score, '$tag_cache',
-											'$label_cache', '', '$note')");
+										'$label_cache', '', '$note')");
 
 								$label_cache = json_decode($label_cache, true);
 
@@ -409,7 +409,7 @@ class Import_Export_All extends Plugin implements IHandler {
 				vsprintf(ngettext("%d article processed, ", "%d articles processed, ", $num_processed), $num_processed).
 				vsprintf(ngettext("%d imported, ", "%d imported, ", $num_imported), $num_imported).
 				vsprintf(ngettext("%d feed created.", "%d feeds created.", $num_feeds_created), $num_feeds_created).
-					"</p>";
+				"</p>";
 
 		} else {
 
