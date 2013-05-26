@@ -58,9 +58,8 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		print "<div dojoType=\"dijit.layout.AccordionPane\" title=\"".__('Import and export')."\">";
 
-		print "<h3>" . __("Article archive") . "</h3>";
-
-		print "<p>" . __("You can export and import your Starred and Archived articles for safekeeping or when migrating between tt-rss instances.") . "</p>";
+		/* gettext will complain, but oh well */
+		print "<p>" . __("You can export and import your articles for safekeeping or when migrating between tt-rss instances.") . "</p>";
 
 		print "<button dojoType=\"dijit.form.Button\" onclick=\"return exportData()\">".
 			__('Export my data')."</button> ";
@@ -75,7 +74,7 @@ class Import_Export_All extends Plugin implements IHandler {
 			enctype=\"multipart/form-data\" method=\"POST\"
 			action=\"backend.php\">
 			<input id=\"export_file\" name=\"export_file\" type=\"file\">&nbsp;
-		<input type=\"hidden\" name=\"op\" value=\"pluginhandler\">
+			<input type=\"hidden\" name=\"op\" value=\"pluginhandler\">
 			<input type=\"hidden\" name=\"plugin\" value=\"import_export\">
 			<input type=\"hidden\" name=\"method\" value=\"dataimport\">
 			<button dojoType=\"dijit.form.Button\" onclick=\"return importData();\" type=\"submit\">" .
@@ -123,32 +122,32 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		if ($offset < 100000 && is_writable(CACHE_DIR . "/export")) {
 			$result = db_query("SELECT
-				ttrss_entries.guid,
-				ttrss_entries.title,
-				ttrss_entries.author,
-				ttrss_entries.no_orig_date,
-				ttrss_entries.date_updated,
-				ttrss_entries.date_entered,
-				content,
-				marked,
-				published,
-				score,
-				note,
-				link,
-				tag_cache,
-				label_cache,
-				unread,
-				last_read,
-				ttrss_feeds.title AS feed_title,
-				ttrss_feeds.feed_url AS feed_url,
-				ttrss_entries.updated
+					ttrss_entries.guid,
+					ttrss_entries.title,
+					ttrss_entries.author,
+					ttrss_entries.no_orig_date,
+					ttrss_entries.date_updated,
+					ttrss_entries.date_entered,
+					content,
+					marked,
+					published,
+					score,
+					note,
+					link,
+					tag_cache,
+					label_cache,
+					unread,
+					last_read,
+					ttrss_feeds.title AS feed_title,
+					ttrss_feeds.feed_url AS feed_url,
+					ttrss_entries.updated
 				FROM
-				ttrss_user_entries LEFT JOIN ttrss_feeds ON (ttrss_feeds.id = feed_id),
+					ttrss_user_entries LEFT JOIN ttrss_feeds ON (ttrss_feeds.id = feed_id),
 					ttrss_entries
-					WHERE
+				WHERE
 					ref_id = ttrss_entries.id AND
 					ttrss_user_entries.owner_uid = " . $_SESSION['uid'] . "
-					ORDER BY ttrss_entries.id LIMIT $limit OFFSET $offset");
+				ORDER BY ttrss_entries.id LIMIT $limit OFFSET $offset");
 
 			$exportname = sha1($_SESSION['uid'] . $_SESSION['login']);
 
@@ -186,7 +185,7 @@ class Import_Export_All extends Plugin implements IHandler {
 		print json_encode(array("exported" => $exported));
 	}
 
-	function perform_data_import($link, $filename, $owner_uid) {
+	function perform_data_import($filename, $owner_uid) {
 
 		$num_imported = 0;
 		$num_processed = 0;
@@ -259,44 +258,44 @@ class Import_Export_All extends Plugin implements IHandler {
 							echo "$num_processed process\n";
 						}
 
-						//db_query($link, "BEGIN");
+						//db_query("BEGIN");
 
 						//print 'GUID:' . $article['guid'] . "\n";
 
-						$result = db_query($link, "SELECT id FROM ttrss_entries
+						$result = db_query("SELECT id FROM ttrss_entries
 							WHERE guid = '".$article['guid']."'");
 
 						if (db_num_rows($result) == 0) {
 
-							$result = db_query($link,
+							$result = db_query(
 								"INSERT INTO ttrss_entries
-								(title,
-								guid,
-								link,
-								updated,
-								content,
-								content_hash,
-								no_orig_date,
-								date_updated,
-								date_entered,
-								comments,
-								num_comments,
-								author)
+									(title,
+									guid,
+									link,
+									updated,
+									content,
+									content_hash,
+									no_orig_date,
+									date_updated,
+									date_entered,
+									comments,
+									num_comments,
+									author)
 								VALUES
-								('".$article['title']."',
-								'".$article['guid']."',
-								'".$article['link']."',
-								'".$article['updated']."',
-								'".$article['content']."',
-								'".sha1($article['content'])."',
-								".bool_to_sql_bool(sql_bool_to_bool($article['no_orig_date'])).",
-								'".$article['date_updated']."',
-								'".$article['date_entered']."',
-								'',
-								'0',
-								'".$article['author']."')");
+									('".$article['title']."',
+									'".$article['guid']."',
+									'".$article['link']."',
+									'".$article['updated']."',
+									'".$article['content']."',
+									'".sha1($article['content'])."',
+									".bool_to_sql_bool(sql_bool_to_bool($article['no_orig_date'])).",
+									'".$article['date_updated']."',
+									'".$article['date_entered']."',
+									'',
+									'0',
+									'".$article['author']."')");
 
-							$result = db_query($link, "SELECT id FROM ttrss_entries
+							$result = db_query("SELECT id FROM ttrss_entries
 								WHERE guid = '".$article['guid']."'");
 
 							if (db_num_rows($result) != 0) {
@@ -320,7 +319,7 @@ class Import_Export_All extends Plugin implements IHandler {
 								if (defined($feed_cache["${feed_url}..${feed_title}"])) {
 									$feed = $feed_cache["${feed_url}..${feed_title}"];
 								} else {
-									$result = db_query($link, "SELECT id FROM ttrss_feeds
+									$result = db_query("SELECT id FROM ttrss_feeds
 										WHERE feed_url = '$feed_url' AND owner_uid = '$owner_uid'");
 
 									if (db_num_rows($result) != 0) {
@@ -328,10 +327,10 @@ class Import_Export_All extends Plugin implements IHandler {
 									} else {
 										// try autocreating feed in Uncategorized...
 
-										$result = db_query($link, "INSERT INTO ttrss_feeds (owner_uid,
+										$result = db_query("INSERT INTO ttrss_feeds (owner_uid,
 											feed_url, title) VALUES ($owner_uid, '$feed_url', '$feed_title')");
 
-										$result = db_query($link, "SELECT id FROM ttrss_feeds
+										$result = db_query("SELECT id FROM ttrss_feeds
 											WHERE feed_url = '$feed_url' AND owner_uid = '$owner_uid'");
 
 										if (db_num_rows($result) != 0) {
@@ -351,7 +350,7 @@ class Import_Export_All extends Plugin implements IHandler {
 
 							//print "$ref_id / $feed / " . $article['title'] . "\n";
 
-							$result = db_query($link, "SELECT int_id FROM ttrss_user_entries
+							$result = db_query("SELECT int_id FROM ttrss_user_entries
 								WHERE ref_id = '$ref_id' AND owner_uid = '$owner_uid' AND $feed_qpart");
 
 							if (db_num_rows($result) == 0) {
@@ -376,28 +375,28 @@ class Import_Export_All extends Plugin implements IHandler {
 
 								++$num_imported;
 
-								$result = db_query($link,
+								$result = db_query(
 									"INSERT INTO ttrss_user_entries
 									(ref_id, owner_uid, feed_id, unread, last_read, marked,
-									published, score, tag_cache, label_cache, uuid, note)
+										published, score, tag_cache, label_cache, uuid, note)
 									VALUES ($ref_id, $owner_uid, $feed, $unread,
 										$last_read, $marked, $published, $score, '$tag_cache',
-										'$label_cache', '', '$note')");
+											'$label_cache', '', '$note')");
 
 								$label_cache = json_decode($label_cache, true);
 
 								if (is_array($label_cache) && $label_cache["no-labels"] != 1) {
 									foreach ($label_cache as $label) {
 
-										label_create($link, $label[1],
+										label_create($label[1],
 											$label[2], $label[3], $owner_uid);
 
-										label_add_article($link, $ref_id, $label[1], $owner_uid);
+										label_add_article($ref_id, $label[1], $owner_uid);
 
 									}
 								}
 
-								//db_query($link, "COMMIT");
+								//db_query("COMMIT");
 							}
 						}
 					}
@@ -409,7 +408,7 @@ class Import_Export_All extends Plugin implements IHandler {
 				vsprintf(ngettext("%d article processed, ", "%d articles processed, ", $num_processed), $num_processed).
 				vsprintf(ngettext("%d imported, ", "%d imported, ", $num_imported), $num_imported).
 				vsprintf(ngettext("%d feed created.", "%d feeds created.", $num_feeds_created), $num_feeds_created).
-				"</p>";
+					"</p>";
 
 		} else {
 
@@ -441,13 +440,35 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		print "<div style='text-align : center'>";
 
-		if (is_file($_FILES['export_file']['tmp_name'])) {
+		if ($_FILES['export_file']['error'] != 0) {
+			print_error(T_sprintf("Upload failed with error code %d",
+				$_FILES['export_file']['error']));
+			return;
+		}
 
-			$this->perform_data_import($_FILES['export_file']['tmp_name'], $_SESSION['uid']);
+		$tmp_file = false;
 
+		if (is_uploaded_file($_FILES['export_file']['tmp_name'])) {
+			$tmp_file = tempnam(CACHE_DIR . '/upload', 'export');
+
+			$result = move_uploaded_file($_FILES['export_file']['tmp_name'],
+				$tmp_file);
+
+			if (!$result) {
+				print_error(__("Unable to move uploaded file."));
+				return;
+			}
 		} else {
-			print "<p>" . T_sprintf("Could not upload file. You might need to adjust upload_max_filesize in PHP.ini (current value = %s)", ini_get("upload_max_filesize")) . " or use CLI import tool.</p>";
+			print_error(__('Error: please upload OPML file.'));
+			return;
+		}
 
+		if (is_file($tmp_file)) {
+			$this->perform_data_import($tmp_file, $_SESSION['uid']);
+			unlink($tmp_file);
+		} else {
+			print_error(__('No file uploaded.'));
+			return;
 		}
 
 		print "<button dojoType=\"dijit.form.Button\"
@@ -458,6 +479,9 @@ class Import_Export_All extends Plugin implements IHandler {
 
 	}
 
+	function api_version() {
+		return 2;
+	}
 
 }
 ?>
