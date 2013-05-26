@@ -75,7 +75,7 @@ class Import_Export_All extends Plugin implements IHandler {
 			action=\"backend.php\">
 			<input id=\"export_file\" name=\"export_file\" type=\"file\">&nbsp;
 			<input type=\"hidden\" name=\"op\" value=\"pluginhandler\">
-			<input type=\"hidden\" name=\"plugin\" value=\"import_export\">
+			<input type=\"hidden\" name=\"plugin\" value=\"import_export_all\">
 			<input type=\"hidden\" name=\"method\" value=\"dataimport\">
 			<button dojoType=\"dijit.form.Button\" onclick=\"return importData();\" type=\"submit\">" .
 			__('Import') . "</button>";
