@@ -56,10 +56,11 @@ class Import_Export_All extends Plugin implements IHandler {
 	function hook_prefs_tab($args) {
 		if ($args != "prefFeeds") return;
 
-		print "<div dojoType=\"dijit.layout.AccordionPane\" title=\"".__('Import and export')."\">";
+		/* gettext will complain, but oh well */
+		print "<div dojoType=\"dijit.layout.AccordionPane\" title=\"".__('Import and export everything')."\">";
 
 		/* gettext will complain, but oh well */
-		print "<p>" . __("You can export and import your articles for safekeeping or when migrating between tt-rss instances.") . "</p>";
+		print "<p>" . __("You can export and import all your articles for safekeeping or when migrating between tt-rss instances.") . "</p>";
 
 		print "<button dojoType=\"dijit.form.Button\" onclick=\"return exportData()\">".
 			__('Export my data')."</button> ";
