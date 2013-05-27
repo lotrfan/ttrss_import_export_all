@@ -231,7 +231,7 @@ class Import_Export_All extends Plugin implements IHandler {
 
 			$articles = $xpath->query("//article");
 
-			$feed_cache = [];
+			$feed_cache = array();
 
 			foreach ($articles as $article_node) {
 				if ($article_node->childNodes) {
