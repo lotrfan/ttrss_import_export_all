@@ -233,6 +233,7 @@ class Import_Export_All extends Plugin implements IHandler {
 		$doc = @DOMDocument::load($filename);
 
 		if (!$doc) {
+			_debug("Gunzipping...");
 			$contents = file_get_contents($filename);
 
 			if ($contents) {
@@ -245,6 +246,7 @@ class Import_Export_All extends Plugin implements IHandler {
 
 			if ($data)
 				$doc = DOMDocument::loadXML($data);
+			_debug("\tdone.");
 		}
 
 		if ($doc) {
@@ -288,12 +290,13 @@ class Import_Export_All extends Plugin implements IHandler {
 					//print_r($article);
 
 
+					++$counter;
 					if ($article['guid']) {
 
 						++$num_processed;
 						if ($counter >= 250) {
 							$counter = 0;
-							echo "$num_processed process\n";
+							_debug("processed $num_processed");
 						}
 
 						//db_query("BEGIN");
