@@ -7,6 +7,7 @@ function exportData() {
 			dijit.byId("dataExportDlg").destroyRecursive();
 
 		var exported = 0;
+		var total = 0;
 
 		dialog = new dijit.Dialog({
 			id: "dataExportDlg",
@@ -22,6 +23,10 @@ function exportData() {
 						try {
 							var rv = JSON.parse(transport.responseText);
 
+							if (rv && rv.total != undefined && rv.total > 0) {
+								total = rv.total;
+							}
+
 							if (rv && rv.exported != undefined) {
 								if (rv.exported > 0) {
 
@@ -29,8 +34,8 @@ function exportData() {
 
 									$("export_status_message").innerHTML =
 										"<img src='images/indicator_tiny.gif'> " +
-										"Exported %d articles, please wait...".replace("%d",
-											exported);
+										"Exported %d of %t articles, please wait...".replace("%d",
+											exported).replace("%t", total);
 
 									setTimeout('dijit.byId("dataExportDlg").prepare()', 2000);
 

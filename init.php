@@ -141,6 +141,21 @@ class Import_Export_All extends Plugin implements IHandler {
 		$offset = (int) db_escape_string($_REQUEST['offset']);
 		$exported = 0;
 		$limit = 500;
+		$total = 0;
+
+		if ($offset == 0) {
+			// Probably really inefficient, but it should only run once...
+			$result = db_query("SELECT
+					ttrss_entries.guid
+				FROM
+					ttrss_user_entries LEFT JOIN ttrss_feeds ON (ttrss_feeds.id = feed_id),
+					ttrss_entries
+				WHERE
+					ref_id = ttrss_entries.id AND
+					ttrss_user_entries.owner_uid = " . $_SESSION['uid'] . "
+				ORDER BY ttrss_entries.id");
+			$total = db_num_rows($result);
+		}
 
 		if ($offset < 100000 && is_writable(CACHE_DIR . "/export")) {
 			$result = db_query("SELECT
@@ -204,7 +219,7 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		}
 
-		print json_encode(array("exported" => $exported));
+		print json_encode(array("exported" => $exported, "total" => $total));
 	}
 
 	function perform_data_import($filename, $owner_uid) {
