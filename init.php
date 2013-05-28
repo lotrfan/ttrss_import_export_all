@@ -461,11 +461,11 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		print "<div align='center'>";
 		print "<button dojoType=\"dijit.form.Button\"
-			onclick=\"dijit.byId('dataExportDlg').prepare()\">".
+			onclick=\"dijit.byId('dataExportAllDlg').prepare()\">".
 			__('Prepare data')."</button>";
 
 		print "<button dojoType=\"dijit.form.Button\"
-			onclick=\"dijit.byId('dataExportDlg').hide()\">".
+			onclick=\"dijit.byId('dataExportAllDlg').hide()\">".
 			__('Close this window')."</button>";
 
 		print "</div>";
@@ -510,7 +510,7 @@ class Import_Export_All extends Plugin implements IHandler {
 		}
 
 		print "<button dojoType=\"dijit.form.Button\"
-			onclick=\"dijit.byId('dataImportDlg').hide()\">".
+			onclick=\"dijit.byId('dataImportAllDlg').hide()\">".
 			__('Close this window')."</button>";
 
 		print "</div>";

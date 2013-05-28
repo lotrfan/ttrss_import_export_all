@@ -3,14 +3,14 @@ function exportData() {
 
 		var query = "backend.php?op=pluginhandler&plugin=import_export_all&method=exportData";
 
-		if (dijit.byId("dataExportDlg"))
-			dijit.byId("dataExportDlg").destroyRecursive();
+		if (dijit.byId("dataExportAllDlg"))
+			dijit.byId("dataExportAllDlg").destroyRecursive();
 
 		var exported = 0;
 		var total = 0;
 
 		dialog = new dijit.Dialog({
-			id: "dataExportDlg",
+			id: "dataExportAllDlg",
 			title: __("Export Data"),
 			style: "width: 600px",
 			prepare: function() {
@@ -37,7 +37,7 @@ function exportData() {
 										"Exported %d of %t articles, please wait...".replace("%d",
 											exported).replace("%t", total);
 
-									setTimeout('dijit.byId("dataExportDlg").prepare()', 2000);
+									setTimeout('dijit.byId("dataExportAllDlg").prepare()', 2000);
 
 								} else {
 
@@ -88,13 +88,13 @@ function dataImportComplete(iframe) {
 
 		notify('');
 
-		if (dijit.byId('dataImportDlg'))
-			dijit.byId('dataImportDlg').destroyRecursive();
+		if (dijit.byId('dataImportAllDlg'))
+			dijit.byId('dataImportAllDlg').destroyRecursive();
 
 		var content = iframe.contentDocument.body.innerHTML;
 
 		dialog = new dijit.Dialog({
-			id: "dataImportDlg",
+			id: "dataImportAllDlg",
 			title: __("Data Import"),
 			style: "width: 600px",
 			onCancel: function() {
