@@ -37,7 +37,7 @@ function exportAllData() {
 										"Exported %d of %t articles, please wait...".replace("%d",
 											exported).replace("%t", total);
 
-									setTimeout('dijit.byId("dataExportAllDlg").prepare()', 2000);
+									setTimeout('dijit.byId("dataExportAllDlg").prepare()', 1000);
 
 								} else {
 
