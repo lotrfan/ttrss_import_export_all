@@ -18,7 +18,7 @@ class Import_Export_All extends Plugin implements IHandler {
 
 	function xml_import_all($args) {
 
-		$filename = $args['xml_import-all'];
+		$filename = $args['xml_import_all'];
 
 		if (!is_file($filename)) {
 			print "error: input filename ($filename) doesn't exist.\n";
