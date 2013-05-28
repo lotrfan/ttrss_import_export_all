@@ -104,12 +104,15 @@ class Import_Export_All extends Plugin implements IHandler {
 		if (file_exists($exportname)) {
 			header("Content-type: text/xml");
 
-			if (function_exists('gzencode')) {
+			// Make sure there aren't any output buffers enabled
+			while (ob_get_level()) ob_end_clean();
+
+			if (in_array("zlib.*", stream_get_filters())) {
 				header("Content-Disposition: attachment; filename=TinyTinyRSS_exported.xml.gz");
-				echo gzencode(file_get_contents($exportname));
+				$this->gzexport($exportname);
 			} else {
 				header("Content-Disposition: attachment; filename=TinyTinyRSS_exported.xml");
-				echo file_get_contents($exportname);
+				readfile($exportname);
 			}
 		} else {
 			echo "File not found.";
@@ -483,6 +486,52 @@ class Import_Export_All extends Plugin implements IHandler {
 	function api_version() {
 		return 2;
 	}
+
+	# Taken from http://www.php.net/manual/en/function.gzopen.php#105676
+	# and modified (into function form) by lotrfan
+	function gzexport($file) {
+		$fin = fopen($file, "rb");
+		if ($fin !== FALSE) {
+			$fout = fopen("php://output", "wb");
+			if ($fout !== FALSE) {
+				// write gzip header
+				fwrite($fout, "\x1F\x8B\x08\x08".pack("V", filemtime($file))."\0\xFF", 10);
+				// write the original file name
+				$oname = str_replace("\0", "", basename($file));
+				fwrite($fout, $oname."\0", 1+strlen($oname));
+				// add the deflate filter using default compression level
+				$fltr = stream_filter_append($fout, "zlib.deflate", STREAM_FILTER_WRITE, -1);
+				// set up the CRC32 hashing context
+				$hctx = hash_init("crc32b");
+				// turn off the time limit
+				if (!ini_get("safe_mode")) set_time_limit(0);
+				$con = TRUE;
+				$fsize = 0;
+				while (($con !== FALSE) && !feof($fin)) {
+					// deflate works best with buffers >32K
+					$con = fread($fin, 64 * 1024);
+					if ($con !== FALSE) {
+						hash_update($hctx, $con);
+						$clen = strlen($con);
+						$fsize += $clen;
+						fwrite($fout, $con, $clen);
+					}
+				}
+				// remove the deflate filter
+				stream_filter_remove($fltr);
+				// write the CRC32 value
+				// hash_final is a string, not an integer
+				$crc = hash_final($hctx, TRUE);
+				// need to reverse the hash_final string so it's little endian
+				fwrite($fout, $crc[3].$crc[2].$crc[1].$crc[0], 4);
+				// write the original uncompressed file size
+				fwrite($fout, pack("V", $fsize), 4);
+				fclose($fout);
+			}
+			fclose($fin);
+		}
+	}
+
 
 }
 ?>
