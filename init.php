@@ -478,18 +478,18 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		print "<div style='text-align : center'>";
 
-		if ($_FILES['export_file']['error'] != 0) {
+		if ($_FILES['export_all_file']['error'] != 0) {
 			print_error(T_sprintf("Upload failed with error code %d",
-				$_FILES['export_file']['error']));
+				$_FILES['export_all_file']['error']));
 			return;
 		}
 
 		$tmp_file = false;
 
-		if (is_uploaded_file($_FILES['export_file']['tmp_name'])) {
+		if (is_uploaded_file($_FILES['export_all_file']['tmp_name'])) {
 			$tmp_file = tempnam(CACHE_DIR . '/upload', 'export');
 
-			$result = move_uploaded_file($_FILES['export_file']['tmp_name'],
+			$result = move_uploaded_file($_FILES['export_all_file']['tmp_name'],
 				$tmp_file);
 
 			if (!$result) {
