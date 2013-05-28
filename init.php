@@ -67,14 +67,14 @@ class Import_Export_All extends Plugin implements IHandler {
 
 		print "<hr>";
 
-		print "<iframe id=\"data_upload_iframe\"
+		print "<iframe id=\"data_upload_all_iframe\"
 			name=\"data_upload_iframe\" onload=\"dataImportAllComplete(this)\"
 			style=\"width: 400px; height: 100px; display: none;\"></iframe>";
 
-		print "<form name=\"import_form\" style='display : block' target=\"data_upload_iframe\"
+		print "<form name=\"import_all_form\" style='display : block' target=\"data_upload_all_iframe\"
 			enctype=\"multipart/form-data\" method=\"POST\"
 			action=\"backend.php\">
-			<input id=\"export_file\" name=\"export_file\" type=\"file\">&nbsp;
+			<input id=\"export_all_file\" name=\"export_all_file\" type=\"file\">&nbsp;
 			<input type=\"hidden\" name=\"op\" value=\"pluginhandler\">
 			<input type=\"hidden\" name=\"plugin\" value=\"import_export_all\">
 			<input type=\"hidden\" name=\"method\" value=\"dataimport\">
@@ -457,7 +457,7 @@ class Import_Export_All extends Plugin implements IHandler {
 
 	function exportData() {
 
-		print "<p style='text-align : center' id='export_status_message'>You need to prepare exported data first by clicking the button below.</p>";
+		print "<p style='text-align : center' id='export_all_status_message'>You need to prepare exported data first by clicking the button below.</p>";
 
 		print "<div align='center'>";
 		print "<button dojoType=\"dijit.form.Button\"

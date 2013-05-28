@@ -32,7 +32,7 @@ function exportAllData() {
 
 									exported += rv.exported;
 
-									$("export_status_message").innerHTML =
+									$("export_all_status_message").innerHTML =
 										"<img src='images/indicator_tiny.gif'> " +
 										"Exported %d of %t articles, please wait...".replace("%d",
 											exported).replace("%t", total);
@@ -41,7 +41,7 @@ function exportAllData() {
 
 								} else {
 
-									$("export_status_message").innerHTML =
+									$("export_all_status_message").innerHTML =
 										ngettext("Finished, exported %d article. You can download the data <a class='visibleLink' href='%u'>here</a>.", "Finished, exported %d articles. You can download the data <a class='visibleLink' href='%u'>here</a>.", exported)
 										.replace("%d", exported)
 										.replace("%u", "backend.php?op=pluginhandler&plugin=import_export_all&subop=exportget");
@@ -51,7 +51,7 @@ function exportAllData() {
 								}
 
 							} else {
-								$("export_status_message").innerHTML =
+								$("export_all_status_message").innerHTML =
 									"Error occured, could not export data.";
 							}
 						} catch (e) {
@@ -111,7 +111,7 @@ function dataImportAllComplete(iframe) {
 
 function importAllData() {
 
-	var file = $("export_file");
+	var file = $("export_all_file");
 
 	if (file.value.length == 0) {
 		alert(__("Please choose the file first."));
@@ -119,7 +119,7 @@ function importAllData() {
 	} else {
 		notify_progress("Importing, please wait...", true);
 
-		Element.show("data_upload_iframe");
+		Element.show("data_upload_all_iframe");
 
 		return true;
 	}
