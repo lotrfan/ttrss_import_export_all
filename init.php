@@ -68,7 +68,7 @@ class Import_Export_All extends Plugin implements IHandler {
 		print "<hr>";
 
 		print "<iframe id=\"data_upload_all_iframe\"
-			name=\"data_upload_iframe\" onload=\"dataImportAllComplete(this)\"
+			name=\"data_upload_all_iframe\" onload=\"dataImportAllComplete(this)\"
 			style=\"width: 400px; height: 100px; display: none;\"></iframe>";
 
 		print "<form name=\"import_all_form\" style='display : block' target=\"data_upload_all_iframe\"
