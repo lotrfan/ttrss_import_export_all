@@ -1,4 +1,4 @@
-function exportData() {
+function exportAllData() {
 	try {
 
 		var query = "backend.php?op=pluginhandler&plugin=import_export_all&method=exportData";
@@ -55,7 +55,7 @@ function exportData() {
 									"Error occured, could not export data.";
 							}
 						} catch (e) {
-							exception_error("exportData", e, transport.responseText);
+							exception_error("exportAllData", e, transport.responseText);
 						}
 
 						notify('');
@@ -76,11 +76,11 @@ function exportData() {
 
 
 	} catch (e) {
-		exception_error("exportData", e);
+		exception_error("exportAllData", e);
 	}
 }
 
-function dataImportComplete(iframe) {
+function dataImportAllComplete(iframe) {
 	try {
 		if (!iframe.contentDocument.body.innerHTML) return false;
 
@@ -105,11 +105,11 @@ function dataImportComplete(iframe) {
 		dialog.show();
 
 	} catch (e) {
-		exception_error("dataImportComplete", e);
+		exception_error("dataImportAllComplete", e);
 	}
 }
 
-function importData() {
+function importAllData() {
 
 	var file = $("export_file");
 

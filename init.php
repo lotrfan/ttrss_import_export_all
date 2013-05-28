@@ -62,13 +62,13 @@ class Import_Export_All extends Plugin implements IHandler {
 		/* gettext will complain, but oh well */
 		print "<p>" . __("You can export and import all your articles for safekeeping or when migrating between tt-rss instances.") . "</p>";
 
-		print "<button dojoType=\"dijit.form.Button\" onclick=\"return exportData()\">".
+		print "<button dojoType=\"dijit.form.Button\" onclick=\"return exportAllData()\">".
 			__('Export my data')."</button> ";
 
 		print "<hr>";
 
 		print "<iframe id=\"data_upload_iframe\"
-			name=\"data_upload_iframe\" onload=\"dataImportComplete(this)\"
+			name=\"data_upload_iframe\" onload=\"dataImportAllComplete(this)\"
 			style=\"width: 400px; height: 100px; display: none;\"></iframe>";
 
 		print "<form name=\"import_form\" style='display : block' target=\"data_upload_iframe\"
@@ -78,7 +78,7 @@ class Import_Export_All extends Plugin implements IHandler {
 			<input type=\"hidden\" name=\"op\" value=\"pluginhandler\">
 			<input type=\"hidden\" name=\"plugin\" value=\"import_export_all\">
 			<input type=\"hidden\" name=\"method\" value=\"dataimport\">
-			<button dojoType=\"dijit.form.Button\" onclick=\"return importData();\" type=\"submit\">" .
+			<button dojoType=\"dijit.form.Button\" onclick=\"return importAllData();\" type=\"submit\">" .
 			__('Import') . "</button>";
 
 
