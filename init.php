@@ -97,6 +97,24 @@ class Import_Export_All extends Plugin implements IHandler {
 		return true;
 	}
 
+	function debug() {
+		$exportname = CACHE_DIR . "/export/" .
+			sha1($_SESSION['uid'] . $_SESSION['login']) . ".xml";
+		echo "Buffer level: " . ob_get_level() . "\n";
+		echo "Stream filters: ";
+		print_r(stream_get_filters());
+		if (in_array("zlib.*", stream_get_filters())) {
+			echo "zlib.deflate detected\n";
+		}
+		return;
+
+		if (file_exists($exportname)) {
+			echo "Found XML file\n";
+		} else {
+			echo "File not found.\n";
+		}
+	}
+
 	function exportget() {
 		$exportname = CACHE_DIR . "/export/" .
 			sha1($_SESSION['uid'] . $_SESSION['login']) . ".xml";
