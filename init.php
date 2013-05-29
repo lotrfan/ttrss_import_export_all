@@ -233,20 +233,8 @@ class Import_Export_All extends Plugin implements IHandler {
 		$doc = @DOMDocument::load($filename);
 
 		if (!$doc) {
-			_debug("Gunzipping...");
-			$contents = file_get_contents($filename);
-
-			if ($contents) {
-				$data = @gzuncompress($contents);
-			}
-
-			if (!$data) {
-				$data = @gzdecode($contents);
-			}
-
-			if ($data)
-				$doc = DOMDocument::loadXML($data);
-			_debug("\tdone.");
+			/* Try uncompressing it */
+			$doc = @DOMDocument::load('compress.zlib://' . $filename);
 		}
 
 		if ($doc) {
