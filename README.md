@@ -6,7 +6,7 @@ A Tiny Tiny RSS (http://tt-rss.org) plugin to import and export all articles.
 Installation
 ------------
  - From your TT-RSS directory, run
-    git clone git://github.com/lotrfan/ttrss_import_export_all.git plugins/import_export_all
+    `git clone git://github.com/lotrfan/ttrss_import_export_all.git plugins/import_export_all`
  - Enable the plugin:
    - If you are not going to use the command line importer (see below), you can enable it in the TT-RSS preferences page.
    - If you plan on using the command line importer, you need to enable it as a system plugin by adding `import_export_all` to the `PLUGINS` line in `config.php`.
@@ -22,9 +22,9 @@ Importing via the command line
  - Actually backup your database.
  - Make sure that the plugin is enabled in `config.php` (not as a user-enabled plugin).
  - Run, as the web server user,
-    php /path/to/tt-rss/update.php --xml_import_all /path/to/exported/file.xml.gz
+    `php /path/to/tt-rss/update.php --xml_import_all /path/to/exported/file.xml.gz`
    e.g., if your web server runs as `http`:
-    sudo -u http php /path/to/tt-rss/update.php --xml_import_all /path/to/exported/file.xml.gz
+    `sudo -u http php /path/to/tt-rss/update.php --xml_import_all /path/to/exported/file.xml.gz`
  - Wait for a long while (if you have a large number of articles to import).
 
 Importing via the web interface
